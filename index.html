@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking Piosenek</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .song-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h2>Ranking Piosenek</h2>
+        <div id="songs-list"></div>
+        <input type="text" id="new-song-input" placeholder="Wprowadź nową piosenkę">
+        <button onclick="addSong()">Dodaj piosenkę</button>
+    </div>
+
+    <script>
+        const songs = [];
+
+        const songsList = document.getElementById('songs-list');
+        const newSongInput = document.getElementById('new-song-input');
+
+        function renderSongs() {
+            songsList.innerHTML = '';
+            songs.forEach((song, index) => {
+                const songItem = document.createElement('div');
+                songItem.className = 'song-item';
+                songItem.innerHTML = `
+                    <span>${song.title}</span>
+                    <button onclick="vote(${index})">Głosuj</button>
+                `;
+                songsList.appendChild(songItem);
+            });
+        }
+
+        function addSong() {
+            const newSongTitle = newSongInput.value.trim();
+            if (newSongTitle !== '') {
+                songs.push({ title: newSongTitle, votes: 0 });
+                newSongInput.value = '';
+                renderSongs();
+            } else {
+                alert('Wprowadź tytuł piosenki!');
+            }
+        }
+
+        function vote(index) {
+            if (songs[index].votes === 0) {
+                songs[index].votes = 1;
+                songs.sort((a, b) => b.votes - a.votes);
+                renderSongs();
+            } else {
+                alert('Możesz głosować tylko raz na piosenkę!');
+            }
+        }
+
+        renderSongs();
+    </script>
+</body>
+</html>
